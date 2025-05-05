@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🩺 Doctor Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(to right, #a4d3ff, #dcdada);
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .main-content {
+      padding: 20px;
+    }
+    .table-actions button {
+      margin-right: 5px;
+    } 
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">🩺 Doctor Dashboard</a>
+      <div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-row gap-3">
+          <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Patients</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Search</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Requests</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+        <a href="#">Patients</a>
+        <a href="#">Search</a>
+        <a href="#">Requests</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-10 main-content">
+        <!-- Search and Add Patient Section -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <h3>Search Patients</h3>
+          <button id="addPatientBtn" class="btn btn-success">+ Add Patient</button>
+        </div>
+        <input type="text" id="searchInput" class="form-control mt-3" placeholder="Search by Name">
+        <button id="searchButton" class="btn btn-primary mt-2">Search</button>
+
+        <!-- Patient Records Table -->
+        <table class="table table-bordered table-striped mt-5">
+          <thead class="table-dark">
+            <tr>
+              <th>Patient ID</th>
+              <th>Name</th>
+              <th>Age</th> <!-- Display Age -->
+              <th>Gender</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Search results will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    
+    const supabaseUrl = 'https://sfqhzoorpthmnrjecjkj.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcWh6b29ycHRobW5yamVjamtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MjUyMDksImV4cCI6MjA2MDMwMTIwOX0.zS9xjegQ1mYpt6OIZLEvD_cvXFIDmRy20-9wDLC2ASE';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Redirect to signup page on button click
+    document.getElementById('addPatientBtn').addEventListener('click', () => {
+      window.location.href = 'patients_createaccount.html'; // Change to patient_signup.html if needed
+    });
+
+    // Function to calculate age from date of birth
+    function calculateAge(dob) {
+      const birthDate = new Date(dob);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+      
+      // Adjust if the birthday hasn't occurred yet this year
+      if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    // Search patients
+    document.getElementById('searchButton').addEventListener('click', async () => {
+      const searchTerm = document.getElementById('searchInput').value.trim();
+      
+      if (searchTerm === '') {
+        alert('Please enter a name to search.');
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .ilike('full_name', `%${searchTerm}%`)
+        .eq('role', 'patient');
+
+      if (error) {
+        console.error('Error searching for patients:', error);
+        return;
+      }
+
+      if (data.length === 0) {
+        alert('No patients found with that name.');
+        return;
+      }
+
+      displaySearchResults(data);
+    });
+
+    // Function to display search results
+    function displaySearchResults(patients) {
+      const resultTableBody = document.querySelector('table tbody');
+      resultTableBody.innerHTML = ''; // Clear previous search results
+
+      patients.forEach(patient => {
+        const age = calculateAge(patient.date_of_birth);  // Calculate age
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${patient.id}</td>
+          <td>${patient.full_name}</td>
+          <td>${age}</td> <!-- Display the calculated age instead of date of birth -->
+          <td>${patient.gender}</td>
+          <td>${patient.status}</td>
+          <td class="table-actions">
+            <button class="btn btn-info btn-sm" onclick="viewPatientDetails(${patient.id})">View</button>
+            <button class="btn btn-warning btn-sm">Edit</button>
+            <button class="btn btn-danger btn-sm">Decline</button>
+          </td>
+        `;
+        resultTableBody.appendChild(row);
+      });
+    }
+
+    // View patient detail
+    window.viewPatientDetails = async function (patientId) {
+      const { data, error } = await supabase
+        .from('patient_records')
+        .select('*')
+        .eq('user_id', patientId)
+        .single();
+
+      if (error || !data) {
+        alert('Failed to fetch patient details.');
+        return;
+      }
+
+      localStorage.setItem('patientId', patientId);
+      window.location.href = `patient_details.html?patientId=${patientId}`;
+    }
+  </script>
+</body>
+</html>

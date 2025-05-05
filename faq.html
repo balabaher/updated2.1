@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQs - Project COC106</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <style>
+      body {
+        background: linear-gradient(to right, #a4d3ff, #dcdada);
+      }
+
+      .navbar {
+        background: linear-gradient(to right, #a4d3ff, #dcdada);
+      }
+
+      .container {
+        border-radius: 10px;
+        border: 2px solid #005bc2;
+        padding: 30px;
+        background: linear-gradient(to right, #a4d3ff, #dcdada);
+      }
+
+      .navbar-nav .nav-item {
+        border: 2px solid #393dff !important;
+        border-radius: 10px;
+        width: 120px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .navbar-nav .nav-item.register-active {
+        background-color: #2e81ff !important;
+        border-color: #2e81ff !important;
+      }
+
+      .navbar-nav .nav-item.register-active .nav-link {
+        color: white !important;
+      }
+
+      .nav-link {
+        color: #002678 !important;
+      }
+
+      .ms-2 {
+        color: #002678;
+        text-decoration: none;
+      }
+
+      .ms-5 {
+        margin-left: 10px;
+      }
+
+      .navbar-brand {
+        text-decoration: none;
+      }
+
+      .text-blue {
+        color: #005bc2 !important;
+      }
+
+      .content {
+        margin-top: 30px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .content h2 {
+        color: #005bc2;
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+
+      .content p {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        border-radius: 15px;
+        margin-bottom: 30px;
+      }
+
+      .card-body {
+        padding: 30px;
+      }
+
+      .card h4 {
+        color: #005bc2;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .card p {
+        color: #555;
+        font-size: 1rem;
+      }
+
+      .card-shadow {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .accordion-button {
+        background-color: #005bc2;
+        color: white;
+        font-weight: bold;
+      }
+
+      .accordion-button:not(.collapsed) {
+        background-color: #0047a0;
+        color: white;
+      }
+      .modal-content {
+        border-radius: 15px;
+        border: 2px solid #3d1cfe;
+      }
+      .modal-title {
+        color: #005bc2;
+      }
+      .modal-body .Guest-Mode {
+        border: 2px solid #3d1cfe;
+        border-radius: 10px;
+        font-size: 17px;
+        color: black;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        padding: 10px; /* Adjust as needed */
+        width: 100%;
+        height: auto;
+      }
+      .modal-body .Guest-Mode:hover {
+        background-color: #005bc2;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-5">
+      <div class="container d-flex align-items-center p-1">
+        <!-- Brand Logo & Name -->
+        <a href="#" class="navbar-brand d-flex align-items-center ms-3">
+          <img src="heart.png" alt="Logo" class="brandlogo" height="40" />
+          <span class="ms-2 fw-bold">P.I.S</span>
+        </a>
+
+        <!-- Navbar Toggler Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span
+            class="navbar-toggler-icon bg-primary border-2px-solid-blue"
+          ></span>
+        </button>
+
+        <!-- Navigation Links (Collapsible) -->
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item mx-2">
+              <a href="index.html" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a href="about.html" class="nav-link">About</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a href="contact.html" class="nav-link">Contact</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a href="faq.html" class="nav-link">FAQs</a>
+            </li>
+            <li class="nav-item mx-2 register-active">
+              <a
+                href="index.html"
+                class="nav-link text-decoration-none"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+                >Register/Login</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FAQs Content -->
+    <div class="container content">
+      <h2 class="text-blue text-center mb-4">Frequently Asked Questions</h2>
+      <p class="text-center text-muted mb-4">
+        Here are some common questions we receive about the Patient Information
+        System (P.I.S). If you have any other questions, feel free to contact
+        us!
+      </p>
+
+      <!-- Accordion FAQ Section -->
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              What is the Patient Information System (P.I.S)?
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show"
+            aria-labelledby="headingOne"
+            data-bs-parent="#faqAccordion"
+          >
+            <div class="accordion-body">
+              The Patient Information System (P.I.S) is a secure, role-based
+              healthcare platform designed to connect hospitals, doctors, and
+              patients across the Philippines.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              How do I register for P.I.S?
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingTwo"
+            data-bs-parent="#faqAccordion"
+          >
+            <div class="accordion-body">
+              You can register for P.I.S by clicking on the "Register/Login"
+              button on the homepage and following the instructions to create an
+              account.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              Is P.I.S available nationwide in the Philippines?
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingThree"
+            data-bs-parent="#faqAccordion"
+          >
+            <div class="accordion-body">
+              Yes, P.I.S is designed to connect hospitals and healthcare
+              providers across the Philippines, allowing for easier access to
+              patient information nationwide.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFour">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFour"
+              aria-expanded="false"
+              aria-controls="collapseFour"
+            >
+              How secure is the patient data in P.I.S?
+            </button>
+          </h2>
+          <div
+            id="collapseFour"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingFour"
+            data-bs-parent="#faqAccordion"
+          >
+            <div class="accordion-body">
+              P.I.S uses state-of-the-art encryption and security protocols to
+              ensure patient data is protected at all times, with access limited
+              to authorized personnel.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Choose Login Type</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <a href="login_patient.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Patient Login</span>
+              </div>
+            </a>
+            <a href="login_doctor.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Doctor Login</span>
+              </div>
+            </a>
+            <a href="admin_login.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Admin Login</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Login Modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Choose Login Type</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <a href="login_patient.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Patient Login</span>
+              </div>
+            </a>
+            <a href="login_doctor.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Doctor Login</span>
+              </div>
+            </a>
+            <a href="admin_login.html" class="text-decoration-none w-75">
+              <div
+                class="Guest-Mode d-flex align-items-center justify-content-center mb-3"
+              >
+                <span>Admin Login</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

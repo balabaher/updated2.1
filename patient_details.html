@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #a4d3ff, #dcdada);
+    }
+    .back-btn {
+      margin-top: 20px;
+      margin-left: 0;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="container mt-5">
+    <!-- Back Button -->
+    <a href="doctor_dashboard.html" class="btn btn-primary back-btn">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <h3>Patient Details</h3>
+
+    <div class="card">
+      <div class="card-header"><strong>Personal Information</strong></div>
+      <div class="card-body">
+        <p><strong>Full Name:</strong> <span id="full-name"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+        <p><strong>Age:</strong> <span id="age"></span></p>
+        <p><strong>Gender:</strong> <span id="gender"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Emergency Contact:</strong> <span id="emergency"></span></p>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header"><strong>Medical History</strong></div>
+      <div class="card-body">
+        <p><strong>Conditions:</strong> <span id="conditions"></span></p>
+        <p><strong>Surgeries:</strong> <span id="surgeries"></span></p>
+        <p><strong>Allergies:</strong> <span id="allergies"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabaseUrl = 'https://sfqhzoorpthmnrjecjkj.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcWh6b29ycHRobW5yamVjamtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MjUyMDksImV4cCI6MjA2MDMwMTIwOX0.zS9xjegQ1mYpt6OIZLEvD_cvXFIDmRy20-9wDLC2ASE';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const patientId = new URLSearchParams(window.location.search).get('patientId');
+
+    // Fetch patient data by joining the users table to get the necessary fields
+    const { data: patient, error: patientError } = await supabase
+      .from('patient_records')
+      .select(`
+        user_id, 
+        date_of_birth, 
+        gender, 
+        medical_history, 
+        surgical_history, 
+        allergies, 
+        emergency_contact_name, 
+        emergency_contact_phone, 
+        users(full_name, phone_number, email)
+      `)
+      .eq('user_id', patientId)
+      .single();
+
+    if (patientError || !patient) {
+      alert('Patient details not found.');
+    }
+
+    // Calculate Age based on date_of_birth
+    function calculateAge(dob) {
+      const birthDate = new Date(dob);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+      
+      if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    // Populate the data in the HTML
+    document.getElementById('full-name').innerText = patient.users.full_name;
+    document.getElementById('dob').innerText = patient.date_of_birth;
+    document.getElementById('age').innerText = calculateAge(patient.date_of_birth);
+    document.getElementById('gender').innerText = patient.gender;
+    document.getElementById('phone').innerText = patient.users.phone_number;
+    document.getElementById('email').innerText = patient.users.email;
+    document.getElementById('emergency').innerText = `${patient.emergency_contact_name} (${patient.emergency_contact_phone})`;
+    document.getElementById('conditions').innerText = patient.medical_history;
+    document.getElementById('surgeries').innerText = patient.surgical_history;
+    document.getElementById('allergies').innerText = patient.allergies;
+  </script>
+</body>
+</html>

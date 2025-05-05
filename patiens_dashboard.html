@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #a4d3ff, #dcdada);
+    }
+    .container {
+      margin-top: 50px;
+      border-radius: 10px;
+      border: 2px solid #005bc2;
+      padding: 30px;
+      background: linear-gradient(to right, #a4d3ff, #dcdada);
+    }
+    .card {
+      margin-bottom: 30px;
+    }
+    footer {
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 217px;
+    }
+    .navbar {
+      background: linear-gradient(to right, #a4d3ff, #dcdada);
+    }
+    .navbar-nav .nav-item {
+      border: 2px solid #393dff !important;
+      border-radius: 10px;
+      width: 120px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .navbar-nav .nav-item.register-active {
+      background-color: #2e81ff !important;
+      border-color: #2e81ff !important;
+    }
+    .navbar-nav .nav-item.register-active .nav-link {
+      color: white !important;
+    }
+    .nav-link {
+      color: #002678 !important;
+    }
+    .ms-2 {
+      color: #002678;
+      text-decoration: none;
+    }
+    .ms-5 {
+      margin-left: 10px;
+    }
+    .navbar-brand {
+      text-decoration: none;
+    }
+    .text-blue {
+      color: #005bc2 !important;
+    }
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: white;
+      border: 2px solid #393dff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      color: #393dff;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .search-bar {
+      margin-top: 20px;
+    }
+    .search-result-item {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f8f9fa;
+      cursor: pointer;
+    }
+    .search-result-item:hover {
+      background-color: #e9ecef;
+    }
+    .dropdown-menu {
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    /* Custom blue color for hamburger menu icon */
+    .navbar-toggler-icon {
+      background-color: #005bc2; /* Set the color to blue */
+      border-radius: 5px; /* Optional: Add rounded corners */
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-5">
+    <div class="container d-flex align-items-center p-1">
+      <a href="#" class="navbar-brand d-flex align-items-center ms-3">
+        <img src="heart.png" alt="Logo" class="brandlogo" height="40" />
+        <span class="ms-2 fw-bold">P.I.S</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-2"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item mx-2">
+            <div class="profile-pic" title="Profile">
+              <span>&#129333;</span>
+            </div>
+            <a href="index.html" class="nav-link" onclick="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Patient Profile Content -->
+  <div class="container">
+    <h3>Patient Profile</h3>
+
+    <div class="card">
+      <div class="card-header"><strong>Personal Information</strong></div>
+      <div class="card-body">
+        <p><strong>Full Name:</strong> <span id="full-name"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+        <p><strong>Gender:</strong> <span id="gender"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Emergency Contact:</strong> <span id="emergency"></span></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><strong>Medical History</strong></div>
+      <div class="card-body">
+        <p><strong>Conditions:</strong> <span id="conditions"></span></p>
+        <p><strong>Surgeries:</strong> <span id="surgeries"></span></p>
+        <p><strong>Allergies:</strong> <span id="allergies"></span></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-3 bg-light">
+    © 2025 Patient Information System | All Rights Reserved
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    
+    const supabaseUrl = 'https://sfqhzoorpthmnrjecjkj.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcWh6b29ycHRobW5yamVjamtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MjUyMDksImV4cCI6MjA2MDMwMTIwOX0.zS9xjegQ1mYpt6OIZLEvD_cvXFIDmRy20-9wDLC2ASE';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const email = localStorage.getItem('userEmail');
+    if (!email) {
+      document.body.innerHTML = "<h3 class='text-center text-danger'>You are not logged in.</h3>";
+      throw new Error("User not logged in.");
+    }
+
+    // Fetch user data
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id, full_name, email, phone_number')
+      .eq('email', email)
+      .single();
+
+    if (userError || !user) {
+      alert("Failed to fetch user.");
+      throw userError;
+    }
+
+    // Fetch patient record data
+    const { data: record, error: recordError } = await supabase
+      .from('patient_records')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (recordError || !record) {
+      alert("No patient record found.");
+      throw recordError;
+    }
+
+    document.getElementById('full-name').innerText = user.full_name;
+    document.getElementById('email').innerText = user.email;
+    document.getElementById('phone').innerText = user.phone_number ?? '';
+    document.getElementById('dob').innerText = record.date_of_birth ?? '';
+    document.getElementById('gender').innerText = record.gender ?? '';
+    document.getElementById('emergency').innerText = `${record.emergency_contact_name ?? ''} (${record.emergency_contact_phone ?? ''})`;
+    document.getElementById('conditions').innerText = record.medical_history ?? '';
+    document.getElementById('surgeries').innerText = record.surgical_history ?? '';
+    document.getElementById('allergies').innerText = record.allergies ?? '';
+
+    // Logout function
+    window.logout = () => {
+      localStorage.removeItem("userEmail");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
